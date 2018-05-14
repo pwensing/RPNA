@@ -1,0 +1,39 @@
+function bool = IsIdentifiable_motor(model,N, i, k)
+    if i <= model.NB
+        R = null(N{i});
+        pi = zeros(20,1); 
+        pi(k) = 1;
+
+        if norm( pi' * R ) > eps^.75
+            bool = false;
+            return
+        end
+
+        for j = 1:model.NB
+            pi = pi(1:10);
+            if i == model.parent(j)
+                Rj = null(N{j});
+
+                AX = Transform_Parameters( model.Xtree{j} );
+                AX_motor = Transform_Parameters( model.Xtree_motor{j} );
+
+                if norm( pi'*([AX AX_motor*model.motor_constraint{i}]*Rj) ) > eps^.75
+                    bool=false;
+                    return
+                end
+            end
+        end
+
+        bool = true;
+    else
+        R = null(N{i-model.NB});
+        pi = zeros(20,1); 
+        pi(10+k) = 1;
+
+        if norm( pi' * R ) > eps^.75
+            bool = false;
+            return
+        end
+        bool = true;
+    end
+end
