@@ -1,4 +1,7 @@
 function robot = CreateScara()
+%% robot = CreateScara()
+% Creates a robot model of the Scara that is compatible with the
+% spatial_v2 dynamics library.
 
 a1 = .1;
 a2 = .2;

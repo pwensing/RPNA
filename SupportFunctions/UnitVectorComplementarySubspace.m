@@ -1,4 +1,8 @@
 function Comp = UnitVectorComplementarySubspace(S)
+%% Comp = UnitVectorComplementarySubspace(S)
+% Given a matrix S whose columns span a subspace, the output Comp
+% provides a matrix whose columns span a complmementary subspace
+
     n = size(S,1);
     m1 = size(S,2);
     m2 = n - size(S,2);

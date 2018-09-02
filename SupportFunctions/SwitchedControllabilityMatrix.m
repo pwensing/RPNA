@@ -1,4 +1,8 @@
 function R = SwitchedControllabilityMatrix(A,B)
+%% R = SwitchedControllabilityMatrix(A,B)
+% Compute the switched Controllability matrix associated with the pairs
+% (A_i, B) where A_i are the elements of the cell array A.
+
     R = RangeBasis(B); % Range of R gives Reachable Subspace
     r = 0;
     % While subspace dimension is growing

@@ -1,4 +1,7 @@
 function robot = CreateCheetahLeg()
+%% robot = CreateCheetahLeg()
+% Creates a robot model of the Cheetah 3 that is compatible with the
+% spatial_v2 dynamics library.
        
 % Constraints on motor parameters to ensure rotational symmetry (about z)
 motor_symmetry_constraint = zeros(6,10);

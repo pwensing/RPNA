@@ -1,4 +1,18 @@
 function [N, M, V , C] = RPNA(model, free_base)
+%% [N, M, V , C] = RPNA(model, free_base)
+% Recursive parameter nullspace algorithm
+% The outputs of the algorithm are
+% N: cell array for the nullspace descriptors characterizing undetectable
+%    inertial transfers across each joint
+% M: Basis for minimal paramers (sometimes called representative base
+%    parameters) of each link
+% V: Attainable velocity span basis for each link
+% C: Null(C) gives the unidentifiable parameters of each link
+%
+% See the accompanying paper for further detail.
+%
+
+
     if nargin == 1
         free_base = 0;
     end

@@ -7,7 +7,7 @@ model = CreatePuma560();      % Industrial robot, 6 DoF
 % model = CreateScara();        % Industrial robot, 3 DoF
 % model = CreateCheetahLeg();   % Single leg of a quadruped, 3 DoF
 
-MODEL_MOTORS = 0; % Include motor inertias (1), or ignore them (0)
+MODEL_MOTORS = 1; % Include motor inertias (1), or ignore them (0)
 FIXED_BASE   = 1; % Treat as fixed base (1), or ignore motion restrictions (0)
 
 %model.gravity = [0 0 0]';
@@ -47,7 +47,7 @@ fprintf(1,'Identifiable Parameter Detail\n');
 if MODEL_MOTORS
     [N, M, V, C] = RPNA_motor(model,~FIXED_BASE);
     [~, RPNA_Condition] = RangeBasis(1);
-    [Null_Basis, Minimal_Basis, Perp_Basis] = ComputeBases_motor(model, N, M);
+    [Null_Basis, Minimal_Basis, Perp_Basis, Perp_Basis_sym] = ComputeBases_motor(model, N, M);
     PrintParameterSummary_motor(model, N, M, V,C, param_names);
 else
     [N, M, V, C] = RPNA(model,~FIXED_BASE);
@@ -60,6 +60,7 @@ RPNA_Nullspace_Dimension = 0;
 for i = 1:model.NB
     RPNA_Nullspace_Dimension = RPNA_Nullspace_Dimension + params_per_body-size(N{i},1);
 end
+
 
 %% Compute identifiable linear combinations with rref
 fprintf(1,'===================================\n');
@@ -85,8 +86,21 @@ end
 Perp_Basis = rref(Perp_Basis')';
 inds = find(abs(Perp_Basis) < 1e-8); % remove small values so printing is clean
 Perp_Basis(inds) = 0;
+inds = find(abs(Perp_Basis-1) < 1e-8); % remove small values so printing is clean
+Perp_Basis(inds) = 1;
+inds = find(abs(Perp_Basis+1) < 1e-8); % remove small values so printing is clean
+Perp_Basis(inds) = -1;
+
 
 Perp_Basis_sym = rref(Perp_Basis_sym')';
+inds = find(abs(Perp_Basis_sym) < 1e-8); % remove small values so printing is clean
+Perp_Basis_sym(inds) = 0;
+inds = find(abs(Perp_Basis_sym-1) < 1e-8); % remove small values so printing is clean
+Perp_Basis_sym(inds) = 1;
+inds = find(abs(Perp_Basis_sym+1) < 1e-8); % remove small values so printing is clean
+Perp_Basis_sym(inds) = -1;
+
+
 
 regrouping_matrix = sym(zeros(params_per_body*model.NB, params_per_body*model.NB  ));
 for i = 1:size(Perp_Basis_sym,2)

@@ -1,7 +1,9 @@
 function Ystack = ComputeSampledRegressor_motor( model, samples)
-    % Compute a number of samples of the classical regressor Y
-    % columns represent contributions from link inertial parameters followed by
-    % motor inertial parameters.
+%% Ystack = ComputeSampledRegressor_motor( model, samples)
+% Compute a number of samples of the classical regressor Y
+% columns represent contributions from link inertial parameters followed by
+% motor inertial parameters.
+
     Ystack = [];
     for i = 1:samples
         qr = rand(model.NB,1);

@@ -1,4 +1,6 @@
-function PrintParameterSummary_motor(model, N, M, V, Q, a)
+function PrintParameterSummary_motor(model, N, M, V, C, a)
+%% PrintParameterSummary_motor(model, N, M, V, C, a)
+% Prints a parameter summary from the outputs of the RPNA algorithm
 
     for i = 1:model.NB
        fprintf('===============================\n');
@@ -62,6 +64,6 @@ function PrintParameterSummary_motor(model, N, M, V, Q, a)
 
         fprintf('\nDim Null N(%d) = %d\n',i,20-size(N{i},1));
         fprintf('Rank VelocitySpan V(%d) = %d\n',i, rank(V{i}));  
-        fprintf('Rank OuterProductSpan K(%d) = %d\n\n',i, rank(Q{i}));  
+        fprintf('Rank OuterProductSpan K(%d) = %d\n\n',i, rank(C{i}));  
         
     end

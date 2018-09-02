@@ -1,4 +1,7 @@
 function robot = CreatePuma560()
+%% robot = CreatePuma560()
+% Creates a robot model of the Puma560 that is compatible with the
+% spatial_v2 dynamics library.
 
 a2 = .2;
 d3 = .4;

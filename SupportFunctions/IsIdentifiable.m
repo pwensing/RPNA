@@ -1,5 +1,8 @@
 function bool = IsIdentifiable(model,N, i, k)
-    
+%% bool = IsIdentifiable(model,N, i, k)
+% Determine if parameter k of body i is identifiable
+% Requires the nullspace descriptor array N from the RPNA
+
     R = null(N{i});
     pi = zeros(10,1); 
     pi(k) = 1;

@@ -1,4 +1,6 @@
 function [A, cA] = RangeBasis(A,clear)
+%% Gives a full rank matrix with the same columnspan as the input
+
     persistent maxCond
     if isempty(maxCond)
         maxCond = 0;

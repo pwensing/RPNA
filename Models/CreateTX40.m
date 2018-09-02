@@ -1,4 +1,7 @@
 function robot = CreateTX40()
+%% robot = CreateTX40()
+% Creates a robot model of the TX40 that is compatible with the
+% spatial_v2 dynamics library.
 
 d3 = .225;
 r3 = 0.035;

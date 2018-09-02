@@ -1,4 +1,10 @@
-function C = OutputMatrix(L1, L2) 
+function C = OutputMatrix(L1, L2)
+%% C = OutputMatrix(L1, L2)
+% Gives the output matrix C(L1, L2) described in the accompanying paper
+% each column of L1 (L2) is a vector l1 (l2)
+% each row of C, cj, satisfies cj'*a = l1'*I*l2 for some l1, l2
+% where a and I are the paried parameter vector and matrix form of any spatial inertia
+
     if all( size(L1) == size(L2) )
         if norm(L1-L2,'fro') < eps
             L1 = RangeBasis(L1);

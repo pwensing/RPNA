@@ -44,6 +44,10 @@ a_trans = inertiaMatToVec(X' * I * X); % Parameters after transformation
 A_X   = jacobian(a_trans, a);          % Linear relation: a_trans = A_X * a
 matlabFunction(A_X,'File','Transform_Parameters','vars',{X});
 
+return
+
+%% The result below are old and no longer used.
+
 %% Compute the dual basis and dual matrix/vector transformation functions
 %  The dual basis below is a orthonormal basis for the subspace of 6x6
 %  matricies that is dual to the inertia matricies
