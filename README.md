@@ -2,7 +2,6 @@
 
 1. A maintained version of this code is available online at:
 https://github.com/pwensing/RPNA
-
 A pre-print of the paper introducing this algorithm is available here:
 https://arxiv.org/abs/1711.03896
 
