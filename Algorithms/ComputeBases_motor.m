@@ -70,13 +70,30 @@ function [Null_Basis, Minimal_Basis, Perp_Basis, Perp_Basis_sym] = ComputeBases_
         % Set entries close to 0,1,-1 to 0,1,-1 so that the symbolic output
         % will be clean at the end.
         tmp = rref(N{i})';
-        inds = find(abs(tmp) < 1e-9); tmp(inds) = 0;      
-        inds = find(abs(tmp-1) < 1e-9); tmp(inds) = 1;
-        inds = find(abs(tmp+1) < 1e-9); tmp(inds) = -1;
+        inds = find(abs(tmp) < 1e-7); tmp(inds) = 0;      
+        inds = find(abs(tmp-1) < 1e-7); tmp(inds) = 1;
+        inds = find(abs(tmp+1) < 1e-7); tmp(inds) = -1;
         
         Perp_Basis(i_inds, perp_inds{i} )     = tmp;
         Perp_Basis_sym(i_inds, perp_inds{i} ) = tmp; 
     end
+    
+    
+    %Perp_Basis = rref(Perp_Basis')';
+    %Perp_Basis_sym = rref(Perp_Basis_sym')';
+
+    inds = find(abs(Perp_Basis) < 1e-8); % remove small values so printing is clean
+    Perp_Basis(inds) = 0;
+    Perp_Basis_sym(inds) = 0;
+
+    inds = find(abs(Perp_Basis-1) < 1e-8); % remove small values so printing is clean
+    Perp_Basis(inds) = 1;
+    Perp_Basis_sym(inds) = 1;
+
+    inds = find(abs(Perp_Basis+1) < 1e-8); % remove small values so printing is clean
+    Perp_Basis(inds) = -1;
+    Perp_Basis_sym(inds) = -1;
+
 end
 
 function inds = parameter_inds(i,model)

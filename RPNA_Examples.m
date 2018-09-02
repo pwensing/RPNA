@@ -7,7 +7,7 @@ model = CreatePuma560();      % Industrial robot, 6 DoF
 % model = CreateScara();        % Industrial robot, 3 DoF
 % model = CreateCheetahLeg();   % Single leg of a quadruped, 3 DoF
 
-MODEL_MOTORS = 1; % Include motor inertias (1), or ignore them (0)
+MODEL_MOTORS = 0; % Include motor inertias (1), or ignore them (0)
 FIXED_BASE   = 1; % Treat as fixed base (1), or ignore motion restrictions (0)
 
 %model.gravity = [0 0 0]';
@@ -84,36 +84,43 @@ end
 % Compute identifiable parameter combinations from the basis for the
 % subspace perpendicular to the parameter nullspace
 Perp_Basis = rref(Perp_Basis')';
+Perp_Basis_sym = rref(Perp_Basis_sym')';
+
 inds = find(abs(Perp_Basis) < 1e-8); % remove small values so printing is clean
 Perp_Basis(inds) = 0;
+Perp_Basis_sym(inds) = 0;
+
 inds = find(abs(Perp_Basis-1) < 1e-8); % remove small values so printing is clean
 Perp_Basis(inds) = 1;
+Perp_Basis_sym(inds) = 1;
+
 inds = find(abs(Perp_Basis+1) < 1e-8); % remove small values so printing is clean
 Perp_Basis(inds) = -1;
-
-
-Perp_Basis_sym = rref(Perp_Basis_sym')';
-inds = find(abs(Perp_Basis_sym) < 1e-8); % remove small values so printing is clean
-Perp_Basis_sym(inds) = 0;
-inds = find(abs(Perp_Basis_sym-1) < 1e-8); % remove small values so printing is clean
-Perp_Basis_sym(inds) = 1;
-inds = find(abs(Perp_Basis_sym+1) < 1e-8); % remove small values so printing is clean
 Perp_Basis_sym(inds) = -1;
-
-
 
 regrouping_matrix = sym(zeros(params_per_body*model.NB, params_per_body*model.NB  ));
 for i = 1:size(Perp_Basis_sym,2)
     ind = find(Perp_Basis_sym(:,i)==1,1);
     regrouping_matrix(ind, :) = Perp_Basis_sym(:,i)';
-    fprintf(1,'Regrouped parameter %s <= %s\n', char(sym_params(ind)), char( Perp_Basis_sym(:,i)'*sym_params));
+    
+    % Identifable parameter combination
+    sym_result = Perp_Basis_sym(:,i)'*sym_params;
+    
+    % Work to strip out zero coefficients
+    [coef, monomials] = coeffs(sym_result);
+    coef = CleanMat(coef);
+    sym_result = simplify( sum( coef(:).*monomials(:) ) );
+    
+    % And then group terms that multiply each parameter
+    sym_result = jacobian(sym_result, sym_params)*sym_params;
+    fprintf(1,'Regrouped parameter %s <= %s\n', char(sym_params(ind)), char(sym_result));
 end
 
 fprintf(1,'\n===================================\n');
 fprintf(1,'Sanity Checks \n');
 fprintf(1,'===================================\n');
-Null_check = norm( Ystack * Null_Basis , 'fro')
-Perp_check = norm( Null_Basis'*Perp_Basis,'fro')
+fprintf('Null Check => norm( Ystack * Null_Basis ) = %e\n', norm( Ystack * Null_Basis , 'fro'))
+fprintf('Perp Check => norm( Null_Basis\''*Perp_Basis ) = %e \n\n',norm(Null_Basis'*Perp_Basis,'fro') );
 
 fprintf(1,'===================================\n');
 fprintf(1,'Summary \n');
@@ -125,7 +132,7 @@ end
 fprintf('Nullspace Dimension RPNA %d\n',RPNA_Nullspace_Dimension)
 fprintf('Identifiable Dimension %d\n',model.NB*params_per_body - RPNA_Nullspace_Dimension)
 
-fprintf('SVD Condition %f\n',SVD_Condition)
-fprintf('RPNA Condition %f\n',RPNA_Condition)
+% fprintf('SVD Condition %f\n',SVD_Condition)
+% fprintf('RPNA Condition %f\n',RPNA_Condition)
 
 fprintf(1,'\n');

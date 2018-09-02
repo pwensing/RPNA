@@ -13,7 +13,7 @@ function Ystack = ComputeSampledRegressor( model, samples,use_HandG_regressor)
             [Yg, Yh] = ComputePositionRegressorNaive(model, qr);
             Y = [Yg ; Yh];
         else
-            Y = ComputeRegressorNaive(model,qr,qdr,qddr,model.gravity);
+            Y = ComputeRegressorNaive(model,qr,qdr,qddr);
         end
         Ystack = [Ystack ; Y];
     end

@@ -9,7 +9,7 @@ function Ystack = ComputeSampledRegressor_motor( model, samples)
         qr = rand(model.NB,1);
         qdr = rand(model.NB,1);
         qddr = rand(model.NB,1);
-        Y = ComputeRegressorNaive_motor(model,qr,qdr,qddr,model.gravity);
+        Y = ComputeRegressorNaive_motor(model,qr,qdr,qddr);
         Ystack = [Ystack ; Y];
     end
 end

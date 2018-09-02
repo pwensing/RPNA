@@ -43,7 +43,7 @@ robot.jtype = {'Rz', 'Rz', 'Rz'};
 robot.jtype_motor = {'Rz', 'Rz', 'Rz'};
 
 for i = 1:3
-    robot.gr{i} = 10.62;
+    robot.gr{i} = 10;
     alpha = dhTable(i,1);
     a = dhTable(i,2);
     d = dhTable(i,3);

@@ -34,7 +34,7 @@ function [Null_Basis, Minimal_Basis, Perp_Basis, Perp_Basis_sym] = ComputeBases(
     for i = 1:model.NB
         i_inds = parameter_inds(i); % Indicies of the inertial parameters for the body after joint i
         parent = model.parent(i);   
-        R{i} =  null(N{i}) ;
+        R{i} =  CleanMat( null(N{i}) );
 
         Minimal_Basis( i_inds , perp_inds{i} ) = M{i};
         
@@ -64,10 +64,7 @@ function [Null_Basis, Minimal_Basis, Perp_Basis, Perp_Basis_sym] = ComputeBases(
         
         % Set entries close to 0,1,-1 to 0,1,-1 so that the symbolic output
         % will be clean at the end.
-        NN = rref(N{i})';
-        inds = find(abs(NN) < 1e-9); NN(inds) = 0;      
-        inds = find(abs(NN-1) < 1e-9); NN(inds) = 1;
-        inds = find(abs(NN+1) < 1e-9); NN(inds) = -1;
+        NN = CleanMat( rref(N{i})' );
         
         Perp_Basis(i_inds, perp_inds{i} )     = NN;
         Perp_Basis_sym(i_inds, perp_inds{i} ) = NN; 
