@@ -4,9 +4,7 @@ addpaths;
 %% Options
 % Uncomment to pick a model
 model = CreatePuma560();      % Industrial robot, 6 DoF
-% model = CreateTX40();         % Industrial robot, 6 DoF
 % model = CreateScara();        % Industrial robot, 3 DoF
-% model = CreateTestModel;      % Example systems, 2 DoF
 % model = CreateCheetahLeg();   % Single leg of a quadruped, 3 DoF
 
 MODEL_MOTORS = 0; % Include motor inertias (1), or ignore them (0)
@@ -47,12 +45,12 @@ fprintf(1,'\n===============================\n');
 fprintf(1,'Identifiable Parameter Detail\n');
 
 if MODEL_MOTORS
-    [N, M, V, C] = RPNA_motor_vnew(model,~FIXED_BASE);
+    [N, M, V, C] = RPNA_motor(model,~FIXED_BASE);
     [~, RPNA_Condition] = RangeBasis(1);
     [Null_Basis, Minimal_Basis, Perp_Basis] = ComputeBases_motor(model, N, M);
     PrintParameterSummary_motor(model, N, M, V,C, param_names);
 else
-    [N, M, V, C] = RPNA_vnew(model,~FIXED_BASE);
+    [N, M, V, C] = RPNA(model,~FIXED_BASE);
     [~, RPNA_Condition] = RangeBasis(1);
     [Null_Basis, Minimal_Basis, Perp_Basis, Perp_Basis_sym] = ComputeBases(model, N, M);
     PrintParameterSummary(model, N, M, V,C, param_names);
